@@ -7,12 +7,13 @@ import './result.dart';
 //   runApp(MyApp());
 // }
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyAppState();
   }
 }
@@ -30,26 +31,52 @@ class _MyAppState extends State<MyApp> {
   final _questions = const [
     {
       'questionText': 'What\'s your favorite color?',
-      'answers': ['Black', 'Red', 'Green', 'White'],
+      'answers': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 2},
+        {'text': 'White', 'score': 0}
+      ],
     },
     {
       'questionText': 'What\'s your favorite animal?',
-      'answers': ['Dog', 'Rabbit', 'Cat', 'Lion'],
+      'answers': [
+        {'text': 'Dog', 'score': 0},
+        {'text': 'Rabbit', 'score': 2},
+        {'text': 'Cat', 'score': 5},
+        {'text': 'Lion', 'score': 8}
+      ],
     },
     {
       'questionText': 'Who is your favorite instructor?',
-      'answers': ['Stephen', 'Ruize', 'Max', 'None'],
+      'answers': [
+        {'text': 'Stephen', 'score': 3},
+        {'text': 'Ruize', 'score': 3},
+        {'text': 'Max', 'score': 3},
+        {'text': 'None', 'score': 9}
+      ],
     }
   ];
 
   var _questionIndex = 0;
+  var _totalScore = 0;
 
-  void _answerQuestion() {
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+    //_totalScore = _totalScore + score;
+    _totalScore += score;
     if (_questionIndex < _questions.length) {
       setState(() {
         _questionIndex = _questionIndex + 1;
       });
-      print(_questionIndex);
+      // print(_questionIndex);
+      // print(_totalScore);
     }
   }
 
@@ -66,7 +93,7 @@ class _MyAppState extends State<MyApp> {
                 questionIndex: _questionIndex,
                 questions: _questions,
               )
-            : const Result(),
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }

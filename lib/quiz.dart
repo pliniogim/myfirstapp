@@ -6,12 +6,14 @@ import 'answer.dart';
 class Quiz extends StatelessWidget {
   final List<Map<String, Object>> questions;
   final int questionIndex;
-  final VoidCallback answerQuestion;
+  final Function answerQuestion;
 
-  Quiz(
-      {required this.questions,
+  const Quiz(
+      {Key? key,
+      required this.questions,
       required this.answerQuestion,
-      required this.questionIndex});
+      required this.questionIndex})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,10 @@ class Quiz extends StatelessWidget {
         // Answer(_answerQuestion),
         //spread operator (pega uma lista e retira todos os elementos desta lista
         // e os adiciona à lista mais interna com valores individuais)
-        ...(questions[questionIndex]['answers'] as List<String>).map((answer) {
-          return Answer(answerQuestion, answer);
+        ...(questions[questionIndex]['answers'] as List<Map<String, Object>>)
+            .map((answer) {
+          return Answer(
+              () => answerQuestion(answer['score']), answer['text'] as String);
         }).toList()
       ],
     );
